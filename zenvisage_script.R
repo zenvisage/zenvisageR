@@ -1,21 +1,10 @@
 library(ggplot2)
 housing <- read.csv("dataSets/landdata-states.csv")
-a <- ggplot(housing, aes(x=Date, y=Home.Value, color=State)) + geom_line()
-b <- ggplot(subset(housing, State %in% list("AK")), aes(x=Date, y=Home.Value, color=State)) + geom_line()
-windows(xpos= 0, ypos = 0)
-plot(a)
-#print(a$data$State)
+f1 <- ggplot(housing, aes(x=Date, y=Home.Value, color=State)) + geom_line()
+f2 <- ggplot(subset(housing, State %in% list("HI")), aes(x=Date, y=Home.Value, color=State)) + geom_line()
+#windows(xpos= 0, ypos = 0)
 #plot(a)
-#
-
-v1 <- process(a,b)
-#multiplot(a,b, cols=2)
-#lapply converts from Factor to corresponding list
-# eg v1[1] is AK, because AK is the first level of the factor
-# v1[2] is MD, because MD is the 21 level of the factor. lapply basically converts from this factor format to character format
-x <- subset(housing, State %in% unlist(lapply(v1, as.character)))
-# x$name <- factor(x$name, levels = x$name[order(x$val)])
-c <-ggplot(x, aes(x=Date, y=Home.Value, color=State)) + geom_line()
+v1 <- process(f1,f2)
+f3 <-ggplot(subset(housing, State %in% v1), aes(x=Date, y=Home.Value, color=State)) + geom_line()
 windows(xpos = -1, ypos = 0)
 plot(c + facet_wrap(~State))
-

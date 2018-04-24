@@ -28,11 +28,13 @@ process <- function(ggplot1, ggplot2) {
   row <- round((maxIndex - 1) / out@p) + 1
   col <- (maxIndex - 1) %% out@p + 1
   N <- 5
-  ndx <- order(out@dist, decreasing = T)[1:N]
+  ndx <- order(out@dist)[1:N]
   outrows <- round((ndx - 1) / out@p) + 1 # elementwise
   outcols <- (ndx - 1) %% out@p + 1
   
   axis_vars <- list(unique(z1)[outrows], unique(z2)[outcols])
-  print(out@dist)
-  return(axis_vars)
+  #lapply converts from Factor to corresponding list
+  # example: given a factor v1 for the states, v1[1] is AK, because AK is the first level of the factor
+  # v1[2] is MD, because MD is the 21 level of the factor. lapply basically converts from this factor format to character format
+  return(unlist(lapply(axis_vars, as.character)))
 }
