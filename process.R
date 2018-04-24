@@ -1,4 +1,4 @@
-process <- function(ggplot1, ggplot2) {
+process <- function(argtype, inputaxisvar, count, ggplot1, ggplot2) {
   library(pdist)
   #d = a$data["State"]
   #c = a$data$State
@@ -25,16 +25,28 @@ process <- function(ggplot1, ggplot2) {
   maxIndex <- which.max(out@dist)
   # convert flattened index (starts from 1 of course in R) to the (pair) tested
   # 51 x 2 -> 102 x 1
-  row <- round((maxIndex - 1) / out@p) + 1
-  col <- (maxIndex - 1) %% out@p + 1
-  N <- 5
-  ndx <- order(out@dist)[1:N]
+  #row <- round((maxIndex - 1) / out@p) + 1
+  #col <- (maxIndex - 1) %% out@p + 1
+  N <- count
+  
+  #grabs the indices of what we want to output
+  if (argtype == "argmax") {
+    ndx <- order(out@dist, decreasing = T)[1:N]
+  } else {
+    ndx <- order(out@dist)[1:N]
+  }
+
   outrows <- round((ndx - 1) / out@p) + 1 # elementwise
   outcols <- (ndx - 1) %% out@p + 1
   
-  axis_vars <- list(unique(z1)[outrows], unique(z2)[outcols])
+  axis_vars <- list(unique(inputaxisvar)[outrows])
   #lapply converts from Factor to corresponding list
   # example: given a factor v1 for the states, v1[1] is AK, because AK is the first level of the factor
   # v1[2] is MD, because MD is the 21 level of the factor. lapply basically converts from this factor format to character format
-  return(unlist(lapply(axis_vars, as.character)))
+  outaxisvar = unlist(lapply(axis_vars, as.character))
+  outaxisvar <- factor(outaxisvar, levels=unique(as.character(outaxisvar)) )
+  print(ndx)
+  print(outaxisvar)
+  print(out@dist[ndx])
+  return(outaxisvar)
 }
