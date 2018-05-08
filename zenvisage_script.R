@@ -11,3 +11,7 @@ windows(xpos = -1, ypos = 0)
 #housing$v1 = v1
 x$v1 = v1
 plot(c + facet_wrap(~State))
+
+
+a = generateViz(housing, "Date", "Home.Value", "State")
+f1 <- generateVizs(housing, x=c())
